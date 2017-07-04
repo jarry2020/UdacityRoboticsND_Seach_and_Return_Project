@@ -55,12 +55,12 @@ And another!
 
 **Note: running the simulator with different choices of resolution and graphics quality may produce different results, particularly on different machines!  Make a note of your simulator settings (resolution and graphics quality set on launch) and frames per second (FPS output to terminal by `drive_rover.py`) in your writeup when you submit the project so your reviewer can reproduce your results.**
 
-Screen resolution: 1440 * 900
+Screen resolution: 1440 * 900;
 Graphics Quality: Fantastic
 
 Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
 
-For the rocks detection, I modified the color_thresh function:
+For the color threshold, I modified the color_thresh function:
 
 def color_thresh(img, rgb_thresh=(160, 160, 160),rgb_thresh_max=(255, 255, 255)):   
     color_select = np.zeros_like(img[:,:,0])
@@ -69,7 +69,15 @@ def color_thresh(img, rgb_thresh=(160, 160, 160),rgb_thresh_max=(255, 255, 255))
     color_select[thresh] = 1
     return color_select
 
+In this case, color threshold is threshed = color_thresh(warped) for the terrain,  threshed_obs = color_thresh(warped,rgb_thresh=(0, 0, 0),rgb_thresh_max=(160, 160, 160)) for the obstacles and threshed_rock = color_thresh(warped,rgb_thresh=(110, 110, 0),rgb_thresh_max=(255, 255, 50)) for the rocks.
 
+For checking the rocks, 
+
+if threshed_rock.any():
+        xpix_rock, ypix_rock = rover_coords(threshed_rock)
+        x_world_rock, y_world_rock = pix_to_world(xpix_rock, ypix_rock, data.xpos[data.count], data.ypos[data.count],               data.yaw[data.count], data.worldmap.shape[0], 10)
+        data.worldmap[y_world_rock, x_world_rock,:] = 255
+        
 
 ![alt text][image3]
 
