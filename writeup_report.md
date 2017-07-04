@@ -79,5 +79,5 @@ if threshed_rock.any():
 ```        
 
 After implement the process_image function into the perception.py, the autonomous model works fine. It can achieve over 60% 
-fidelity after mapping 40% of the map. But sometimes, it will stuck unde an obstacle. r
+fidelity after mapping 40% of the map. But sometimes, it will stuck under an obstacle.
 
