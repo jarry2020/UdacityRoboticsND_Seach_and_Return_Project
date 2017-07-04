@@ -62,22 +62,23 @@ Here I'll talk about the approach I took, what techniques I used, what worked an
 
 For the color threshold, I modified the color_thresh function:
 
+```python
 def color_thresh(img, rgb_thresh=(160, 160, 160),rgb_thresh_max=(255, 255, 255)):   
     color_select = np.zeros_like(img[:,:,0])
     thresh = (img[:,:,0] > rgb_thresh[0]) & (img[:,:,1] > rgb_thresh[1]) & (img[:,:,2] > rgb_thresh[2]) \
                 & (img[:,:,0] < rgb_thresh_max[0]) & (img[:,:,1] < rgb_thresh_max[1]) & (img[:,:,2] < rgb_thresh_max[2])    
     color_select[thresh] = 1
     return color_select
-
+```
 In this case, color threshold is threshed = color_thresh(warped) for the terrain,  threshed_obs = color_thresh(warped,rgb_thresh=(0, 0, 0),rgb_thresh_max=(160, 160, 160)) for the obstacles and threshed_rock = color_thresh(warped,rgb_thresh=(110, 110, 0),rgb_thresh_max=(255, 255, 50)) for the rocks.
 
 For checking the rocks, 
-
+```python
 if threshed_rock.any():
         xpix_rock, ypix_rock = rover_coords(threshed_rock)
         x_world_rock, y_world_rock = pix_to_world(xpix_rock, ypix_rock, data.xpos[data.count], data.ypos[data.count],               data.yaw[data.count], data.worldmap.shape[0], 10)
         data.worldmap[y_world_rock, x_world_rock,:] = 255
-        
+```        
 
 ![alt text][image3]
 
